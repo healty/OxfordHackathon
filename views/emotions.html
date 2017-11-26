@@ -7,7 +7,7 @@
     <style> 
     .keyboard { margin-left: auto; margin-right: auto; left:0; right:0; font-size: 99px; position: absolute; bottom: 0; }
     .keyboardRow { text-align:center }
-.key { display:inline-block; border:1px solid red; padding:10px;margin-bottom:5px; }
+.key { display:inline-block; text-align:center; width:99px; border:1px solid red; padding:10px;margin-bottom:10px; margin-top: 10px }
 </style>
 </head>
 <body>
@@ -20,6 +20,8 @@
         </button>
     </form>
     <div id="message">
+    </div>
+    <div id="key">
     </div>
         <div class="keyboard">
             <div class="keyboardRow">   <span class="key">Q</span>
@@ -97,6 +99,10 @@
                 $("#message").html(emotion.emotion + " " + emotion.score)
             })
         }
+
+        $(".key").on('click', function(e){
+            $("#key").html($(this).html());
+        });
     </script>
 </body>
 </html>
