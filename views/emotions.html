@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSSample</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+
+    <style> 
+    .keyboard { margin-left: auto; margin-right: auto; left:0; right:0; font-size: 99px; position: absolute; bottom: 0; }
+    .keyboardRow { text-align:center }
+.key { display:inline-block; border:1px solid red; padding:10px;margin-bottom:5px; }
+</style>
+</head>
+<body>
+
+    <form onclick="">
+        Enter a url
+        <input type="text" id="url">
+        <button onclick="myFun(); return false">
+            Submit
+        </button>
+    </form>
+    <div id="message">
+    </div>
+        <div class="keyboard">
+            <div class="keyboardRow">   <span class="key">Q</span>
+            <span class="key">W</span>
+            <span class="key">E</span>
+            <span class="key">R</span>
+            <span class="key">T</span>
+            <span class="key">Y</span>
+            <span class="key">U</span>
+            <span class="key">I</span>
+            <span class="key">O</span>
+            <span class="key">P</span>
+
+            </div>
+            <div class="keyboardRow">   <span class="key">A</span>
+            <span class="key">S</span>
+            <span class="key">D</span>
+            <span class="key">F</span>
+            <span class="key">G</span>
+            <span class="key">H</span>
+            <span class="key">J</span>
+            <span class="key">K</span>
+            <span class="key">L</span>
+
+            </div>
+            <div class="keyboardRow">   <span class="key">Z</span>
+            <span class="key">X</span>
+            <span class="key">C</span>
+            <span class="key">V</span>
+            <span class="key">B</span>
+            <span class="key">N</span>
+            <span class="key">M</span>
+
+            </div>
+        </div>
+        <script type="text/javascript">
+        function request(url) {
+            var params = {
+                // Request parameters
+            };
+            var body = "{'url': '"+ url +"'}"
+            return $.ajax({
+                url: "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize?" + $.param(params),
+                headers: {"Content-Type":"application/json",
+                        "Ocp-Apim-Subscription-Key":"405673de3a4740ccb0733aca7905b7e9"},
+                type: "POST",
+                // Request body
+                data: body
+            })
+            .done(function(data) {
+                return data
+            })
+            .fail(function(e) {
+                alert("error");
+            });
+        };
+        function getEmotion(data) {
+            let emotion = '';
+            let score = 0;
+            for (let e in data) {
+                if (data[e] > score) {
+                    score = data[e]
+                    emotion = e
+                }
+            }
+            return {
+                "emotion": emotion,
+                "score": score
+            }
+        }
+        function myFun(e) {
+            let url = $('#url').val();
+            request(url).done(function(data){
+                let emotion = getEmotion(data[0].scores)
+                $("#message").html(emotion.emotion + " " + emotion.score)
+            })
+        }
+    </script>
+</body>
+</html>
